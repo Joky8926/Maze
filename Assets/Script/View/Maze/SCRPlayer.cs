@@ -1,41 +1,39 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SCRPlayer : MonoBehaviour {
-	public static SCRPlayer instance;
-	private Vector3 vec3NextPos = Vector3.zero;
+	private SCRMazePanel scrMazePanel;
+	private Vector3 vec3NextPos;
 	private Vector3 vec3Dict;
 	private float fTime = 0f;
+	private bool bMove = false;
 
-	void Awake() {
-		instance = this;
-	}
-
-	public void ResetPos(Vector3 vec3Pos) {
-		Debug.Log(vec3Pos);
-		vec3NextPos = vec3Pos;
-		GetNextPos();
-	}
-
-	void Update () {
-		if (vec3NextPos == Vector3.zero) {
+	void Update() {
+		if (!bMove) {
 			return;
 		}
 		fTime += Time.deltaTime;
 		if (fTime >= 1f) {
-			GetNextPos();
+			OnMoveEnd();
 		} else {
 			this.transform.position += vec3Dict * Time.deltaTime;
 		}
 	}
 
-	private void GetNextPos() {
+	public void Init(SCRMazePanel scrMazePanel, Vector3 vec3Pos) {
+		this.scrMazePanel = scrMazePanel;
+		this.transform.position = vec3Pos;
+	}
+
+	public void DoMove(Vector3 vec3Pos) {
+		bMove = true;
+		vec3NextPos = vec3Pos;
+		vec3Dict = vec3NextPos - this.transform.position;
+	}
+
+	private void OnMoveEnd() {
 		fTime = 0f;
+		bMove = false;
 		this.transform.position = vec3NextPos;
-		vec3NextPos = SCRGrid.instance.GetNextPos();
-		if (vec3NextPos != Vector3.zero) {
-			vec3Dict = vec3NextPos - this.transform.position;
-		}
+		scrMazePanel.OnMoveEnd();
 	}
 }

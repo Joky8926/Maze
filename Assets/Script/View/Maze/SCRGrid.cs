@@ -1,28 +1,28 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class SCRGrid : MonoBehaviour {
 	public static SCRGrid instance;
-	public GameObject _preBlock;
-	public SCRBlock.DelegateOnClickBlock onClickBlock;
-
-	private List<SCRBlock> lstBlock = new List<SCRBlock>();
+	public DelegateOnClickBlock onClickBlock;
+	private SCRMazePanel scrMazePanel;
+	private CSPrefabFactory preFactory;
 	private UIGrid uiGrid;
+	private List<SCRBlock> lstBlock = new List<SCRBlock>();
 	private int uMaxCol;
 	private int uMaxRow;
 	private int uLastIndex = 0;
 	private List<int> lstPath = new List<int>();
 	private int uMoveIndex = 1;
 
-	void Awake() {
-		uiGrid = this.GetComponent<UIGrid>();
-		uMaxCol = uiGrid.maxPerLine;
-		uMaxRow = 4;
+	public void Init(SCRMazePanel scrMazePanel, int uRow, int uCol, int[] arrValue) {
+		this.scrMazePanel = scrMazePanel;
 		instance = this;
+		uiGrid = this.GetComponent<UIGrid>();
+		InitGrid(uRow, uCol);
+		SetBlockValue(arrValue);
 	}
 
-	public void ResetGrid(int uRow, int uCol) {
+	public void InitGrid(int uRow, int uCol) {
 		uMaxRow = uRow;
 		uMaxCol = uCol;
 		uiGrid.maxPerLine = uMaxCol;
@@ -32,9 +32,12 @@ public class SCRGrid : MonoBehaviour {
 	}
 
 	private void CreateAllBlock(int count) {
-		ShowAllBlock(count);
+		for (int i = 0; i < count && i < lstBlock.Count; i++) {
+			lstBlock[i].SetShow(true);
+		}
+		preFactory = CSPrefabFactory.Instance();
 		for (int i = lstBlock.Count; i < count; i++) {
-			SCRBlock scr = CreateBlock(i);
+			SCRBlock scr = CreateOneBlock(i);
 			lstBlock.Add(scr);
 		}
 		for (int i = count; i < lstBlock.Count; i++) {
@@ -42,23 +45,22 @@ public class SCRGrid : MonoBehaviour {
 		}
 	}
 
-	private void ShowAllBlock(int count) {
-		for (int i = 0; i < count && i < lstBlock.Count; i++) {
-			lstBlock[i].SetShow(true);
-		}
-	}
-
-	private SCRBlock CreateBlock(int index) {
-		GameObject block = Instantiate(_preBlock);
-		block.transform.parent = this.transform;
-		block.transform.localScale = Vector3.one;
-		block.name = _preBlock.name + "_" + index;
-		SCRBlock scr = block.GetComponent<SCRBlock>();
+	private SCRBlock CreateOneBlock(int index) {
+		GameObject goBlock = preFactory.CreateMazeBlock();
+		CSGameObject.AddChildGO(goBlock, this.gameObject);
+		goBlock.name += "_" + index;
+		SCRBlock scr = goBlock.GetComponent<SCRBlock>();
 		scr.index = index;
 		if (onClickBlock != null) {
 			scr.onClickBlock += onClickBlock;
 		}
 		return scr;
+	}
+
+	private void SetBlockValue(int[] arrValue) {
+		for (int i = 0; i < arrValue.Length; i++) {
+			lstBlock[i].SetValue(arrValue[i]);
+		}
 	}
 
 	private SCRBlock GetLeft(int index) {
@@ -160,21 +162,20 @@ public class SCRGrid : MonoBehaviour {
 		return str;
 	}
 
-	public void SetValue(int[] arrValue) {
-		for (int i = 0; i < arrValue.Length; i++) {
-			lstBlock[i].SetValue(arrValue[i]);
-		}
+	public bool CheckHasNextPos() {
+		return uMoveIndex < lstPath.Count;
 	}
 
 	public Vector3 GetNextPos() {
-		if (uMoveIndex >= lstPath.Count) {
-			return Vector3.zero;
-		}
 		int uCurIndex = lstPath[uMoveIndex++];
 		return lstBlock[uCurIndex].transform.position;
 	}
 
 	public void ResetPlayerPos() {
-		SCRPlayer.instance.ResetPos(lstBlock[0].transform.position);
+		scrMazePanel.DoMove();
+	}
+
+	public Vector3 GetFirstPos() {
+		return lstBlock[0].transform.position;
 	}
 }

@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SCRBlock : MonoBehaviour {
-	public delegate void DelegateOnClickBlock(int uIndex);
 	public DelegateOnClickBlock onClickBlock;
 
 	public GameObject _goDown;
@@ -107,7 +104,7 @@ public class SCRBlock : MonoBehaviour {
 	}
 
 	public void SetValue(int value) {
-		Debug.Log("SetValue:" + uIndex + "|" + value + "|" + (value & 1) + "|" + (value & 1 << 1));
+//		Debug.Log("SetValue:" + uIndex + "|" + value + "|" + (value & 1) + "|" + (value & 1 << 1));
 		if ((value & 1) != 0) {
 			_goNonRight.SetActive(true);
 		}

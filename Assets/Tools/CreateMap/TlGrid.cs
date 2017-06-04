@@ -24,7 +24,7 @@ public class TlGrid : MonoBehaviour {
 		}
 		uCol = int.Parse(_lblCol.text);
 		uRow = int.Parse(_lblRow.text);
-		scrGrid.ResetGrid(uRow, uCol);
+		scrGrid.InitGrid(uRow, uCol);
 	}
 
 	private void OnClickBlock(int uIndex) {

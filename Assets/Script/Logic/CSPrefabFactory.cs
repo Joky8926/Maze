@@ -26,7 +26,7 @@ public class CSPrefabFactory {
 		return goMazeGrid;
 	}
 
-	public GameObject GetMazeBlock() {
+	public GameObject CreateMazeBlock() {
 		GameObject goMazeBlock = GetCommonGO(PER_MAZE_BLOCK, true);
 		return goMazeBlock;
 	}
