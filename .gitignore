@@ -1,0 +1,10 @@
+
+*.DS_Store
+*.unitypackage
+*.csproj
+*.sln
+*.userprefs
+*.unityproj
+Temp/
+Library/
+.gitignore.swp
