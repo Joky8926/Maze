@@ -162,20 +162,26 @@ public class SCRGrid : MonoBehaviour {
 		return str;
 	}
 
-	public bool CheckHasNextPos() {
-		return uMoveIndex < lstPath.Count;
-	}
-
-	public Vector3 GetNextPos() {
-		int uCurIndex = lstPath[uMoveIndex++];
-		return lstBlock[uCurIndex].transform.position;
-	}
-
 	public void ResetPlayerPos() {
 		scrMazePanel.DoMove();
 	}
 
-	public Vector3 GetFirstPos() {
-		return lstBlock[0].transform.position;
+	public bool hasNextPos {
+		get {
+			return uMoveIndex < lstPath.Count;
+		}
+	}
+
+	public Vector3 firstPos {
+		get {
+			return lstBlock[0].transform.position;
+		}
+	}
+
+	public Vector3 nextPos {
+		get {
+			int uCurIndex = lstPath[uMoveIndex++];
+			return lstBlock[uCurIndex].transform.position;
+		}
 	}
 }

@@ -20,9 +20,8 @@ public class SCRMazePanel : MonoBehaviour {
 	}
 
 	private void MoveNext() {
-		if (scrGrid.CheckHasNextPos()) {
-			Vector3 vec3Pos = scrGrid.GetNextPos();
-			scrPlayer.DoMove(vec3Pos);
+		if (scrGrid.hasNextPos) {
+			scrPlayer.DoMove(scrGrid.nextPos);
 		}
 	}
 
@@ -42,20 +41,18 @@ public class SCRMazePanel : MonoBehaviour {
 		GameObject goMazePlayer = preFactory.GetMazePlayer();
 		CSGameObject.AddChildGO(goMazePlayer, this.gameObject);
 		scrPlayer = goMazePlayer.GetComponent<SCRPlayer>();
-		scrPlayer.Init(this, scrGrid.GetFirstPos());
+		scrPlayer.Init(this, scrGrid.firstPos);
 	}
 
 	private void LoadMap() {
 		StreamReader sr = File.OpenText(Application.dataPath + "//map1");
 		string str = sr.ReadLine();
 		sr.Close();
-//		Debug.Log(str);
 		InitMap(str);
 	}
 
 	private void InitMap(string str) {
 		string[] arrStr = str.Split('|');
-//		Debug.Log("len:" + arrStr.Length);
 		string[] arrGridStr = arrStr[0].Split(':');
 		int uRow = int.Parse(arrGridStr[0]);
 		int uCol = int.Parse(arrGridStr[1]);
