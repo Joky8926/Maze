@@ -2,7 +2,6 @@
 using UnityEngine;
 
 public class SCRGrid : MonoBehaviour {
-	public static SCRGrid instance;
 	public DelegateOnClickBlock onClickBlock;
 	private SCRMazePanel scrMazePanel;
 	private CSPrefabFactory preFactory;
@@ -16,7 +15,6 @@ public class SCRGrid : MonoBehaviour {
 
 	public void Init(SCRMazePanel scrMazePanel, int uRow, int uCol, int[] arrValue) {
 		this.scrMazePanel = scrMazePanel;
-		instance = this;
 		uiGrid = this.GetComponent<UIGrid>();
 		InitGrid(uRow, uCol);
 		SetBlockValue(arrValue);
@@ -50,7 +48,7 @@ public class SCRGrid : MonoBehaviour {
 		CSGameObject.AddChildGO(goBlock, this.gameObject);
 		goBlock.name += "_" + index;
 		SCRBlock scr = goBlock.GetComponent<SCRBlock>();
-		scr.index = index;
+		scr.Init(this, index);
 		if (onClickBlock != null) {
 			scr.onClickBlock += onClickBlock;
 		}
@@ -162,7 +160,7 @@ public class SCRGrid : MonoBehaviour {
 		return str;
 	}
 
-	public void ResetPlayerPos() {
+	public void OnBlockPress() {
 		scrMazePanel.DoMove();
 	}
 

@@ -7,38 +7,31 @@ public class SCRBlock : MonoBehaviour {
 	public GameObject _goRight;
 	public GameObject _goNonDown;
 	public GameObject _goNonRight;
+	private SCRGrid scrGrid;
 	private int uIndex;
 
-	void Awake() {
+	public void Init(SCRGrid scrGrid, int uIndex) {
+		this.scrGrid = scrGrid;
+		this.uIndex = uIndex;
 		CleanAllLine();
 		_goNonDown.SetActive(false);
 		_goNonRight.SetActive(false);
 	}
 
 	void OnClick() {
-		Debug.Log("index:" + uIndex);
 		if (onClickBlock != null) {
 			onClickBlock(uIndex);
 		}
 	}
 
 	void OnDragOver() {
-		SCRGrid.instance.DoLine(uIndex);
-		Debug.Log("OnDragOver:" + uIndex);
-	}
-
-	void OnDragOut() {
-		Debug.Log("OnDragOut:" + uIndex);
+		scrGrid.DoLine(uIndex);
 	}
 
 	void OnPress(bool isPressed) {
-		if (isPressed) {
-//			SCRGrid.instance.SetLastIndex(uIndex);
-		} else {
-//			SCRGrid.instance.CleanAllLine();
-			SCRGrid.instance.ResetPlayerPos();
+		if (!isPressed) {
+			scrGrid.OnBlockPress();
 		}
-		Debug.Log("OnPress:" + uIndex + "|" + isPressed);
 	}
 
 	public bool SetDownLine() {
@@ -74,12 +67,6 @@ public class SCRBlock : MonoBehaviour {
 		this.gameObject.SetActive(bShow);
 	}
 
-	public int index {
-		set {
-			uIndex = value;
-		}
-	}
-
 	private bool isNonDown {
 		get {
 			return _goNonDown.activeSelf;
@@ -104,7 +91,6 @@ public class SCRBlock : MonoBehaviour {
 	}
 
 	public void SetValue(int value) {
-//		Debug.Log("SetValue:" + uIndex + "|" + value + "|" + (value & 1) + "|" + (value & 1 << 1));
 		if ((value & 1) != 0) {
 			_goNonRight.SetActive(true);
 		}
