@@ -1,5 +1,3 @@
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
 // Community contribution: http://www.tasharen.com/forum/index.php?topic=9268.0
 Shader "Hidden/Unlit/Transparent Colored (TextureClip)"
 {
@@ -39,7 +37,7 @@ Shader "Hidden/Unlit/Transparent Colored (TextureClip)"
 			#define UNITY_VERTEX_OUTPUT_STEREO
 			#define UNITY_SETUP_INSTANCE_ID(v)
 			#define UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(i)
-			#define UnityObjectToClipPos(v) UnityObjectToClipPos(v)
+			#define UnityObjectToClipPos(v) mul(UNITY_MATRIX_MVP, v)
 			#endif
 
 			sampler2D _MainTex;

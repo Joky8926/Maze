@@ -9,19 +9,18 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1683270812837834}
+  m_RootGameObject: {fileID: 1000014106675412}
   m_IsPrefabParent: 1
---- !u!1 &1683270812837834
+--- !u!1 &1000014106675412
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
+  serializedVersion: 4
   m_Component:
-  - component: {fileID: 4536847408094076}
-  - component: {fileID: 114294371383769740}
-  - component: {fileID: 114519810706245608}
-  - component: {fileID: 114909840273793260}
+  - 4: {fileID: 4000011738948776}
+  - 114: {fileID: 114000013903822802}
+  - 114: {fileID: 114000013274053992}
   m_Layer: 8
   m_Name: Pre_MazeGrid
   m_TagString: Untagged
@@ -29,25 +28,36 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4536847408094076
+--- !u!4 &4000011738948776
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1683270812837834}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -134.00002, y: 125, z: 0}
+  m_GameObject: {fileID: 1000014106675412}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -200, y: 200, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114294371383769740
+--- !u!114 &114000013274053992
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1683270812837834}
+  m_GameObject: {fileID: 1000014106675412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a98bbee7c517a4151a4c0c283151d7ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114000013903822802
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000014106675412}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 07c4de3b4b6fe9045b059ee627c100df, type: 3}
@@ -63,27 +73,3 @@ MonoBehaviour:
   hideInactive: 0
   keepWithinPanel: 0
   sorted: 0
---- !u!114 &114519810706245608
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1683270812837834}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a98bbee7c517a4151a4c0c283151d7ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _preBlock: {fileID: 1515126874453288, guid: df2d1ef65ecd546c7b02d9e62f84585d, type: 2}
---- !u!114 &114909840273793260
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1683270812837834}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f083b59d471974dc9b530f579182e37d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scrGrid: {fileID: 114519810706245608}
