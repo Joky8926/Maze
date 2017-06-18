@@ -17,6 +17,18 @@ public class TlNewGrid : MonoBehaviour {
 		_lblCol.value = "1";
 	}
 
+	void Update() {
+		if (Input.GetMouseButtonDown(0)) {
+			Debug.Log("MouseDown");
+		}
+		if (Input.GetMouseButton(0)) {
+			Debug.Log("Mouse");
+		}
+		if (Input.GetMouseButtonUp(0)) {
+			Debug.Log("MouseUp");
+		}
+	}
+
 	public void OnChangeGrid() {
 		if (_lblCol.value == "" || _lblRow.value == "") {
 			return;
