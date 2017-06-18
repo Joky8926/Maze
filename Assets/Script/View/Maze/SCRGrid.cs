@@ -15,7 +15,6 @@ public class SCRGrid : MonoBehaviour {
 
 	public void Init(SCRMazePanel scrMazePanel, int uRow, int uCol, int[] arrValue) {
 		this.scrMazePanel = scrMazePanel;
-		uiGrid = this.GetComponent<UIGrid>();
 		InitGrid(uRow, uCol);
 		SetBlockValue(arrValue);
 	}
@@ -23,6 +22,7 @@ public class SCRGrid : MonoBehaviour {
 	public void InitGrid(int uRow, int uCol) {
 		uMaxRow = uRow;
 		uMaxCol = uCol;
+		uiGrid = this.GetComponent<UIGrid>();
 		uiGrid.maxPerLine = uMaxCol;
 		CreateAllBlock(uMaxRow * uMaxCol);
 		uiGrid.Reposition();
