@@ -8,24 +8,24 @@ public class TlDrawLine : MonoBehaviour {
 	private TlLine[,] arrRightLine = new TlLine[5, 10];
 	private Vector2 vec2LastPos;
 	private bool bMove = false;
+	private Vector2 vec2Offset = new Vector2(35, 35);
+	private TlLine lastLine;
 
 	void Start() {
-	
+		InitLine();
 	}
 
 	void Update() {
-		if (Input.GetMouseButtonDown(0)) {
-			DrawLine();
-		}
 		if (Input.GetMouseButton(0)) {
 			if (bMove) {
-				CheckDir(vec2LastPos, UICamera.lastEventPosition);
+				DrawDir(vec2LastPos, UICamera.lastEventPosition);
 			}
 			vec2LastPos = UICamera.lastEventPosition;
 			bMove = true;
 		}
 		if (Input.GetMouseButtonUp(0)) {
 			bMove = false;
+			lastLine = null;
 		}
 	}
 
@@ -36,15 +36,13 @@ public class TlDrawLine : MonoBehaviour {
 		return go;
 	}
 
-	private void DrawLine() {
-		Vector2 vec2 = UICamera.lastEventPosition;
-		int X = Mathf.FloorToInt(vec2.x / 50);
-		int Y = Mathf.FloorToInt(vec2.y / 50);
-		if (arrDownLine.GetLength(0) <= X || arrDownLine.GetLength(1) <= Y) {
-			return;
+	private void InitLine() {
+		for (int i = 0; i < arrDownLine.GetLength(0); i ++) {
+			for (int j = 0; j < arrDownLine.GetLength(1); j++) {
+				DrawDownLine(i, j);
+				DrawRightLine(i, j);
+			}
 		}
-		DrawDownLine(X, Y);
-		DrawRightLine(X, Y);
 	}
 
 	private void DrawDownLine(int x, int y) {
@@ -52,7 +50,8 @@ public class TlDrawLine : MonoBehaviour {
 			return;
 		}
 		GameObject go = CreateLine(_goPreDownLine);
-		Vector3 pos = new Vector3(x * 50 - Screen.width / 2, (y + 1) * 50 - Screen.height * 0.5f);
+		Vector2 vec2Pos = new Vector2(x * 50 - Screen.width / 2, (y + 1) * 50 - Screen.height / 2) + vec2Offset;
+		Vector3 pos = new Vector3(vec2Pos.x, vec2Pos.y);
 		go.transform.localPosition = pos;
 		TlLine scrLine = go.GetComponent<TlLine>();
 		arrDownLine[x, y] = scrLine;
@@ -63,7 +62,8 @@ public class TlDrawLine : MonoBehaviour {
 			return;
 		}
 		GameObject go = CreateLine(_goPresRightLine);
-		Vector3 pos = new Vector3((x + 1) * 50 - Screen.width / 2, (y + 1) * 50 - Screen.height * 0.5f);
+		Vector2 vec2Pos = new Vector2((x + 1) * 50 - Screen.width / 2, (y + 1) * 50 - Screen.height / 2) + vec2Offset;
+		Vector3 pos = new Vector3(vec2Pos.x, vec2Pos.y);
 		go.transform.localPosition = pos;
 		TlLine scrLine = go.GetComponent<TlLine>();
 		arrDownLine[x, y] = scrLine;
@@ -74,21 +74,56 @@ public class TlDrawLine : MonoBehaviour {
 		return vec2;
 	}
 
-	private void CheckDir(Vector2 lastPos, Vector2 nowPos) {
+	private void DrawDir(Vector2 lastPos, Vector2 nowPos) {
 		float X = lastPos.x - nowPos.x;
 		float Y = lastPos.y - nowPos.y;
+		TlLine scrLine;
 		if (Mathf.Abs(X) > Mathf.Abs(Y)) {
-			if (X > 0) {
-				Debug.Log("左");
-			} else if (X < 0) {
-				Debug.Log("右");
+			scrLine = GetLine(ELineDir.eldDown);
+			if (scrLine == null) {
+				return;
+			}
+			if (lastLine != null && lastLine != scrLine) {
+				return;
+			}
+			if (X == 0) {
+				return;
+			}
+			if (lastLine == null) {
+				lastLine = scrLine;
+				lastLine.InitHorizontal(vec2LastPos + vec2Offset);
 			}
 		} else {
-			if (Y > 0) {
-				Debug.Log("下");
-			} else if (Y < 0) {
-				Debug.Log("上");
+			scrLine = GetLine(ELineDir.eldRight);
+			if (scrLine == null) {
+				return;
 			}
+			if (lastLine != null && lastLine != scrLine) {
+				return;
+			}
+			if (Y == 0) {
+				return;
+			}
+			if (lastLine == null) {
+				lastLine = scrLine;
+				lastLine.InitVertical(vec2LastPos + vec2Offset);
+			}
+		}
+	}
+
+	private TlLine GetLine(ELineDir eLineDir) {
+		Vector2 vec2 = UICamera.lastEventPosition - vec2Offset;
+		int X = Mathf.FloorToInt(vec2.x / 50);
+		int Y = Mathf.FloorToInt(vec2.y / 50);
+		if (arrDownLine.GetLength(0) <= X || arrDownLine.GetLength(1) <= Y) {
+			return null;
+		}
+		if (eLineDir == ELineDir.eldDown) {
+			Debug.Log("Down:" + X + "|" + Y);
+			return arrDownLine[X, Y];
+		} else {
+			Debug.Log("Right:" + X + "|" + Y);
+			return arrRightLine[X, Y];
 		}
 	}
 }
