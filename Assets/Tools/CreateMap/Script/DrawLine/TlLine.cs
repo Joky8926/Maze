@@ -16,6 +16,10 @@ public class TlLine : MonoBehaviour {
 		this.gameObject.SetActive(false);
 	}
 
+	public void Init() {
+		// TODO: 初始化水平线还是垂直线
+	}
+
 	public void InitPosX(float x) {
 		fMoveStartPos = x;
 		Vector3 pos = new Vector3(x, orgPos.y);
