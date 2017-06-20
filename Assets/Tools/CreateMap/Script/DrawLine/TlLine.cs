@@ -67,7 +67,7 @@ public class TlLine : MonoBehaviour {
 		switch (eMoveDir) {
 			case EMoveDir.eMdNone:
 				fSize = x;
-				eMoveDir = EMoveDir.eMdLeft;
+				eMoveDir = EMoveDir.eMdRight;
 				break;
 			case EMoveDir.eMdLeft:
 				fSize -= x;
@@ -87,7 +87,7 @@ public class TlLine : MonoBehaviour {
 		switch (eMoveDir) {
 			case EMoveDir.eMdNone:
 				fSize = y;
-				eMoveDir = EMoveDir.eMdLeft;
+				eMoveDir = EMoveDir.eMdUp;
 				break;
 			case EMoveDir.eMdUp:
 				fSize += y;
@@ -107,7 +107,7 @@ public class TlLine : MonoBehaviour {
 		switch (eMoveDir) {
 			case EMoveDir.eMdNone:
 				fSize = y;
-				eMoveDir = EMoveDir.eMdLeft;
+				eMoveDir = EMoveDir.eMdDown;
 				break;
 			case EMoveDir.eMdUp:
 				fSize -= y;
@@ -132,8 +132,8 @@ public class TlLine : MonoBehaviour {
 	}
 
 	private void DrawVerLine() {
-		if (eMoveDir == EMoveDir.eMdDown) {
-			Vector3 pos = new Vector3(orgPos.x, fMoveStartPos - fSize);
+		if (eMoveDir == EMoveDir.eMdUp) {
+			Vector3 pos = new Vector3(orgPos.x, fMoveStartPos + fSize);
 			this.transform.localPosition = pos;
 		}
 		uiSprite.height = (int)fSize;

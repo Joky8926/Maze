@@ -74,17 +74,17 @@ public class TlDrawLine : MonoBehaviour {
 	}
 
 	private void DrawLine() {
-		float X = vec2LastPos.x - UICamera.lastEventPosition.x;
-		float Y = vec2LastPos.y - UICamera.lastEventPosition.y;
-		if (X == 0 || Y == 0) {
+		float X = UICamera.lastEventPosition.x - vec2LastPos.x;
+		float Y = UICamera.lastEventPosition.y - vec2LastPos.y;
+		if (X == 0 && Y == 0) {
 			return;
 		}
 		if (lastLine != null) {
 			if (lastLine.f_eLineDir == ELineDir.eLdHorizontal) {
 				if (X > 0) {
-					lastLine.MoveRight (X);
+					lastLine.MoveRight(X);
 				} else {
-					lastLine.MoveLeft (-X);
+					lastLine.MoveLeft(-X);
 				}
 			} else {
 				if (Y > 0) {
