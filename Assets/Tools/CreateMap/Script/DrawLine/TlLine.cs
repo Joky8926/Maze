@@ -8,7 +8,6 @@ public class TlLine : MonoBehaviour {
 	private bool bMove = false;
 	private float fSize = 0f;
 	private float fMoveStartPos;
-	private EMoveDir eMoveDir = EMoveDir.eMdNone;
 	private ELineDir eLineDir = ELineDir.eLdNone;
 
 	void Start () {
@@ -27,124 +26,43 @@ public class TlLine : MonoBehaviour {
 		}
 	}
 
-	public void InitPosX(float x) {
-		fMoveStartPos = x;
-		Vector3 pos = new Vector3(x, orgPos.y);
+	public void InitPos(float fPos) {
+		fMoveStartPos = fPos;
 		this.gameObject.SetActive(true);
-		this.transform.localPosition = pos;
-		uiSprite.width = (int)fSize;
-	}
-
-	public void InitPosY(float y) {
-		fMoveStartPos = y;
-		Vector3 pos = new Vector3(orgPos.x, y);
-		this.gameObject.SetActive(true);
-		this.transform.localPosition = pos;
-		uiSprite.height = (int)fSize;
-	}
-
-	public void MoveLeft(float x) {
-		switch (eMoveDir) {
-			case EMoveDir.eMdNone:
-				fSize = x;
-				eMoveDir = EMoveDir.eMdLeft;
-				break;
-			case EMoveDir.eMdLeft:
-				fSize += x;
-				break;
-			case EMoveDir.eMdRight:
-				fSize -= x;
-				if (fSize < 0) {
-					eMoveDir = EMoveDir.eMdLeft;
-					fSize = -fSize;
-				}
-				break;
+		Vector3 vec3Pos;
+		if (eLineDir == ELineDir.eLdHorizontal) {
+			vec3Pos = new Vector3(fMoveStartPos, orgPos.y);
+			uiSprite.width = (int)fSize;
+		} else {
+			vec3Pos = new Vector3(orgPos.x, fMoveStartPos);
+			uiSprite.height = (int)fSize;
 		}
-		DrawHorLine();
+		this.transform.localPosition = vec3Pos;
 	}
 
-	public void MoveRight(float x) {
-		switch (eMoveDir) {
-			case EMoveDir.eMdNone:
-				fSize = x;
-				eMoveDir = EMoveDir.eMdRight;
-				break;
-			case EMoveDir.eMdLeft:
-				fSize -= x;
-				if (fSize < 0) {
-					eMoveDir = EMoveDir.eMdRight;
-					fSize = -fSize;
-				}
-				break;
-			case EMoveDir.eMdRight:
-				fSize += x;
-				break;
+	public void Move(float fDist) {
+		fSize += fDist;
+		if (eLineDir == ELineDir.eLdHorizontal) {
+			DrawHorLine();
+		} else {
+			DrawVerLine();
 		}
-		DrawHorLine();
-	}
-
-	public void MoveUp(float y) {
-		switch (eMoveDir) {
-			case EMoveDir.eMdNone:
-				fSize = y;
-				eMoveDir = EMoveDir.eMdUp;
-				break;
-			case EMoveDir.eMdUp:
-				fSize += y;
-				break;
-			case EMoveDir.eMdDown:
-				fSize -= y;
-				if (fSize < 0) {
-					eMoveDir = EMoveDir.eMdUp;
-					fSize = -fSize;
-				}
-				break;
-		}
-		DrawVerLine();
-	}
-
-	public void MoveDown(float y) {
-		switch (eMoveDir) {
-			case EMoveDir.eMdNone:
-				fSize = y;
-				eMoveDir = EMoveDir.eMdDown;
-				break;
-			case EMoveDir.eMdUp:
-				fSize -= y;
-				if (fSize < 0) {
-					eMoveDir = EMoveDir.eMdDown;
-					fSize = -fSize;
-				}
-				break;
-			case EMoveDir.eMdDown:
-				fSize += y;
-				break;
-		}
-		DrawVerLine();
 	}
 
 	private void DrawHorLine() {
-		if (eMoveDir == EMoveDir.eMdLeft) {
-			Vector3 pos = new Vector3(fMoveStartPos - fSize, orgPos.y);
+		if (fSize < 0) {
+			Vector3 pos = new Vector3(fMoveStartPos + fSize, orgPos.y);
 			this.transform.localPosition = pos;
 		}
-		uiSprite.width = (int)fSize;
+		uiSprite.width = (int)Mathf.Abs(fSize);
 	}
 
 	private void DrawVerLine() {
-		if (eMoveDir == EMoveDir.eMdUp) {
+		if (fSize > 0) {
 			Vector3 pos = new Vector3(orgPos.x, fMoveStartPos + fSize);
 			this.transform.localPosition = pos;
 		}
-		uiSprite.height = (int)fSize;
-	}
-
-	public void HorizontalMove() {
-
-	}
-
-	public void VerticalMove() {
-
+		uiSprite.height = (int)Mathf.Abs(fSize);
 	}
 }
 
@@ -152,12 +70,4 @@ public enum ELineDir {
 	eLdNone,
 	eLdHorizontal,
 	eLdVertical
-};
-
-public enum EMoveDir {
-	eMdNone,
-	eMdLeft,
-	eMdRight,
-	eMdUp,
-	eMdDown
 };
