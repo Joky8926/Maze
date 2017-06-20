@@ -39,13 +39,13 @@ public class TlDrawLine : MonoBehaviour {
 	private void InitLine() {
 		for (int i = 0; i < arrDownLine.GetLength(0); i ++) {
 			for (int j = 0; j < arrDownLine.GetLength(1); j++) {
-				DrawDownLine(i, j);
-				DrawRightLine(i, j);
+				DrawHorizontalLine(i, j);
+				DrawVerticalLine(i, j);
 			}
 		}
 	}
 
-	private void DrawDownLine(int x, int y) {
+	private void DrawHorizontalLine(int x, int y) {
 		if (arrDownLine[x, y] != null) {
 			return;
 		}
@@ -55,10 +55,11 @@ public class TlDrawLine : MonoBehaviour {
 		go.transform.localPosition = pos;
 		go.name = _goPreDownLine.name + "_" + x + "_" + y;
 		TlLine scrLine = go.GetComponent<TlLine>();
+		scrLine.Init(ELineDir.eLdHorizontal);
 		arrDownLine[x, y] = scrLine;
 	}
 
-	private void DrawRightLine(int x, int y) {
+	private void DrawVerticalLine(int x, int y) {
 		if (arrRightLine[x, y] != null) {
 			return;
 		}
@@ -68,6 +69,7 @@ public class TlDrawLine : MonoBehaviour {
 		go.transform.localPosition = pos;
 		go.name = _goPresRightLine.name + "_" + x + "_" + y;
 		TlLine scrLine = go.GetComponent<TlLine>();
+		scrLine.Init(ELineDir.eLdVertical);
 		arrRightLine[x, y] = scrLine;
 	}
 
@@ -77,42 +79,39 @@ public class TlDrawLine : MonoBehaviour {
 		if (X == 0 || Y == 0) {
 			return;
 		}
-		TlLine scrLine;
+		if (lastLine != null) {
+			if (lastLine.f_eLineDir == ELineDir.eLdHorizontal) {
+				if (X > 0) {
+					lastLine.MoveRight (X);
+				} else {
+					lastLine.MoveLeft (-X);
+				}
+			} else {
+				if (Y > 0) {
+					lastLine.MoveUp(Y);
+				} else {
+					lastLine.MoveDown(-Y);
+				}
+			}
+			return;
+		}
 		if (Mathf.Abs(X) > Mathf.Abs(Y)) {
-			scrLine = GetLine(ELineDir.eldDown);
-			if (scrLine == null) {
-				return;
-			}
-			if (lastLine != null && lastLine != scrLine) {
-				return;
-			}
-			if (lastLine == null) {
-				lastLine = scrLine;
-				float posX = vec2LastPos.x - Screen.width / 2;
-				lastLine.InitPosX(posX);
-			}
+			lastLine = GetLine(ELineDir.eLdHorizontal);
+			float posX = vec2LastPos.x - Screen.width / 2;
+			lastLine.InitPosX(posX);
 			if (X > 0) {
 				lastLine.MoveRight(X);
 			} else {
 				lastLine.MoveLeft(-X);
 			}
 		} else {
-			scrLine = GetLine(ELineDir.eldRight);
-			if (scrLine == null) {
-				return;
-			}
-			if (lastLine != null && lastLine != scrLine) {
-				return;
-			}
-			if (lastLine == null) {
-				lastLine = scrLine;
-				float poxY = vec2LastPos.y - Screen.height / 2;
-				lastLine.InitPosY(poxY);
-			}
+			lastLine = GetLine(ELineDir.eLdVertical);
+			float poxY = vec2LastPos.y - Screen.height / 2;
+			lastLine.InitPosY(poxY);
 			if (Y > 0) {
-//				lastLine.MoveUp(Y);
+				lastLine.MoveUp(Y);
 			} else {
-//				lastLine.MoveDown(-Y);
+				lastLine.MoveDown(-Y);
 			}
 		}
 	}
@@ -121,13 +120,9 @@ public class TlDrawLine : MonoBehaviour {
 		Vector2 vec2 = UICamera.lastEventPosition - vec2Offset;
 		int X = Mathf.FloorToInt(vec2.x / 50);
 		int Y = Mathf.FloorToInt(vec2.y / 50);
-		if (X < 0 || Y < 0) {
-			return null;
-		}
-		if (arrDownLine.GetLength(0) <= X || arrDownLine.GetLength(1) <= Y) {
-			return null;
-		}
-		if (eLineDir == ELineDir.eldDown) {
+		X = Mathf.Clamp(X, 0, arrDownLine.GetLength (0) - 1);
+		Y = Mathf.Clamp(Y, 0, arrDownLine.GetLength (1) - 1);
+		if (eLineDir == ELineDir.eLdHorizontal) {
 			Debug.Log("Down:" + X + "|" + Y);
 			return arrDownLine[X, Y];
 		} else {

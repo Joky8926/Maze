@@ -9,6 +9,7 @@ public class TlLine : MonoBehaviour {
 	private float fSize = 0f;
 	private float fMoveStartPos;
 	private EMoveDir eMoveDir = EMoveDir.eMdNone;
+	private ELineDir eLineDir = ELineDir.eLdNone;
 
 	void Start () {
 		uiSprite = this.GetComponent<UISprite>();
@@ -16,8 +17,14 @@ public class TlLine : MonoBehaviour {
 		this.gameObject.SetActive(false);
 	}
 
-	public void Init() {
-		// TODO: 初始化水平线还是垂直线
+	public void Init(ELineDir _eLineDir) {
+		eLineDir = _eLineDir;
+	}
+
+	public ELineDir f_eLineDir {
+		get {
+			return eLineDir;
+		}
 	}
 
 	public void InitPosX(float x) {
@@ -142,8 +149,9 @@ public class TlLine : MonoBehaviour {
 }
 
 public enum ELineDir {
-	eldRight,
-	eldDown
+	eLdNone,
+	eLdHorizontal,
+	eLdVertical
 };
 
 public enum EMoveDir {
