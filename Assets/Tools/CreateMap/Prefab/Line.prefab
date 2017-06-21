@@ -22,7 +22,7 @@ GameObject:
   - 114: {fileID: 114000012716372766}
   - 114: {fileID: 114000010641146992}
   m_Layer: 8
-  m_Name: Right
+  m_Name: Line
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -82,14 +82,14 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 0, g: 0, b: 0, a: 1}
   mPivot: 1
-  mWidth: 2
+  mWidth: 50
   mHeight: 50
   mDepth: 0
   mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 0.04
+  aspectRatio: 1
   mType: 1
   mFillDirection: 4
   mFillAmount: 1

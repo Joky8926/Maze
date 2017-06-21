@@ -2,8 +2,9 @@
 using System.Collections;
 
 public class TlDrawLine : MonoBehaviour {
-	public GameObject _goPreDownLine;
-	public GameObject _goPresRightLine;
+	public GameObject _goPreLine;
+	private const string HORIZONTAL_LINE = "HorizontalLine";
+	private const string VERTICAL_LINE = "Vertical";
 	private TlLine[,] arrDownLine = new TlLine[5, 10];
 	private TlLine[,] arrRightLine = new TlLine[5, 10];
 	private Vector2 vec2LastPos;
@@ -46,30 +47,22 @@ public class TlDrawLine : MonoBehaviour {
 	}
 
 	private void DrawHorizontalLine(int x, int y) {
-		if (arrDownLine[x, y] != null) {
-			return;
-		}
-		GameObject go = CreateLine(_goPreDownLine);
+		GameObject go = CreateLine(_goPreLine);
 		Vector2 vec2Pos = new Vector2(x * 50 - Screen.width / 2, (y + 1) * 50 - Screen.height / 2) + vec2Offset;
 		Vector3 pos = new Vector3(vec2Pos.x, vec2Pos.y);
-		go.transform.localPosition = pos;
-		go.name = _goPreDownLine.name + "_" + x + "_" + y;
+		go.name = HORIZONTAL_LINE + "_" + x + "_" + y;
 		TlLine scrLine = go.GetComponent<TlLine>();
-		scrLine.Init(ELineDir.eLdHorizontal);
+		scrLine.Init(ELineDir.eLdHorizontal, pos);
 		arrDownLine[x, y] = scrLine;
 	}
 
 	private void DrawVerticalLine(int x, int y) {
-		if (arrRightLine[x, y] != null) {
-			return;
-		}
-		GameObject go = CreateLine(_goPresRightLine);
-		Vector2 vec2Pos = new Vector2((x + 1) * 50 - Screen.width / 2, (y + 1) * 50 - Screen.height / 2) + vec2Offset;
+		GameObject go = CreateLine(_goPreLine);
+		Vector2 vec2Pos = new Vector2((x + 1) * 50 - Screen.width / 2, y * 50 - Screen.height / 2) + vec2Offset;
 		Vector3 pos = new Vector3(vec2Pos.x, vec2Pos.y);
-		go.transform.localPosition = pos;
-		go.name = _goPresRightLine.name + "_" + x + "_" + y;
+		go.name = VERTICAL_LINE + "_" + x + "_" + y;
 		TlLine scrLine = go.GetComponent<TlLine>();
-		scrLine.Init(ELineDir.eLdVertical);
+		scrLine.Init(ELineDir.eLdVertical, pos);
 		arrRightLine[x, y] = scrLine;
 	}
 
