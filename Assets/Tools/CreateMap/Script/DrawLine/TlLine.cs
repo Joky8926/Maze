@@ -30,13 +30,7 @@ public class TlLine : MonoBehaviour {
 		this.gameObject.SetActive(false);
 	}
 
-	public ELineDir f_eLineDir {
-		get {
-			return eLineDir;
-		}
-	}
-
-	public void InitPos(float fPos) {
+	public void InitMoveStartPos(float fPos) {
 		fMoveStartPos = fPos;
 		this.gameObject.SetActive(true);
 		Vector3 vec3Pos;
@@ -67,13 +61,13 @@ public class TlLine : MonoBehaviour {
 				pos = new Vector3 (orgPos.x, fMoveStartPos + fSize);
 			}
 			this.transform.localPosition = pos;
-			if (CheckEnd ()) {
+			if (f_bIsEnd) {
 				uLineLength = (int)(fMoveStartPos - fOrgPos);
 			} else {
 				uLineLength = (int)(-fSize);
 			}
 		} else {
-			if (CheckEnd ()) {
+			if (f_bIsEnd) {
 				uLineLength = (int)(fOrgPos + MAX_SIZE - fMoveStartPos);
 			} else {
 				uLineLength = (int)fSize;
@@ -86,17 +80,16 @@ public class TlLine : MonoBehaviour {
 		}
 	}
 
-	public bool CheckEnd() {
-		if (fSize > 0) {
-			if (fMoveStartPos + fSize - fOrgPos >= MAX_SIZE) {
-				return true;
-			}
-		} else {
-			if (fMoveStartPos + fSize <= fOrgPos) {
-				return true;
-			}
+	public bool f_bIsEnd {
+		get {
+			return fMoveStartPos + fSize - fOrgPos >= MAX_SIZE || fMoveStartPos + fSize <= fOrgPos;
 		}
-		return false;
+	}
+
+	public ELineDir f_eLineDir {
+		get {
+			return eLineDir;
+		}
 	}
 }
 

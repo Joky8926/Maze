@@ -81,7 +81,7 @@ public class TlDrawLine : MonoBehaviour {
 				lastLine = GetLine(ELineDir.eLdVertical);
 				fPos = vec2LastPos.y - Screen.height / 2;
 			}
-			lastLine.InitPos(fPos);
+			lastLine.InitMoveStartPos(fPos);
 		}
 		float fDist;
 		if (lastLine.f_eLineDir == ELineDir.eLdHorizontal) {
@@ -90,7 +90,7 @@ public class TlDrawLine : MonoBehaviour {
 			fDist = Y;
 		}
 		lastLine.Move(fDist);
-		if (lastLine.CheckEnd ()) {
+		if (lastLine.f_bIsEnd) {
 			lastLine = null;
 		}
 	}
