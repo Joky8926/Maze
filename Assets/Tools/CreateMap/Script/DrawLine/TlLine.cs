@@ -51,18 +51,63 @@ public class TlLine : MonoBehaviour {
 
 	private void DrawHorLine() {
 		if (fSize < 0) {
-			Vector3 pos = new Vector3(fMoveStartPos + fSize, orgPos.y);
+			Vector3 pos = new Vector3 (fMoveStartPos + fSize, orgPos.y);
 			this.transform.localPosition = pos;
+			if (CheckEnd ()) {
+				uiSprite.width = fMoveStartPos - orgPos.x;
+			} else {
+				uiSprite.width = -fSize;
+			}
+		} else {
+			if (CheckEnd ()) {
+				uiSprite.width = orgPos.x + MAX_SIZE - fMoveStartPos;
+			} else {
+				uiSprite.width = fSize;
+			}
 		}
-		uiSprite.width = (int)Mathf.Abs(fSize);
 	}
 
 	private void DrawVerLine() {
 		if (fSize > 0) {
-			Vector3 pos = new Vector3(orgPos.x, fMoveStartPos + fSize);
+			Vector3 pos = new Vector3 (orgPos.x, fMoveStartPos + fSize);
 			this.transform.localPosition = pos;
+			if (CheckEnd ()) {
+				uiSprite.height = orgPos.y - fMoveStartPos;
+			} else {
+				uiSprite.height = fSize;
+			}
+		} else {
+			if (CheckEnd ()) {
+				uiSprite.height = fMoveStartPos - (orgPos.y - MAX_SIZE);
+			} else {
+				uiSprite.height = -fSize;
+			}
 		}
-		uiSprite.height = (int)Mathf.Abs(fSize);
+	}
+
+	public bool CheckEnd() {
+		if (eLineDir == ELineDir.eLdHorizontal) {
+			if (fSize > 0) {
+				if (fMoveStartPos + fSize - orgPos.x >= MAX_SIZE) {
+					return true;
+				}
+			} else {
+				if (fMoveStartPos + fSize <= orgPos.x) {
+					return true;
+				}
+			}
+		} else {
+			if (fSize > 0) {
+				if (fMoveStartPos + fSize >= orgPos.y) {
+					return true;
+				}
+			} else {
+				if (orgPos.y - fMoveStartPos + fSize >= MAX_SIZE) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
 

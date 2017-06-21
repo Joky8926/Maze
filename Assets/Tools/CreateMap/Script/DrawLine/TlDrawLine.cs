@@ -97,6 +97,9 @@ public class TlDrawLine : MonoBehaviour {
 			fDist = Y;
 		}
 		lastLine.Move(fDist);
+		if (lastLine.CheckEnd ()) {
+			lastLine = null;
+		}
 	}
 
 	private TlLine GetLine(ELineDir eLineDir) {
