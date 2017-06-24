@@ -6,18 +6,20 @@ public class TlLine : MonoBehaviour {
 	private const int MAX_SIZE = 50;
 	private const int LINE_WIDTH = 2;
 	private Vector3 orgPos;
-	private bool bMove = false;
-	private float fSize = 0f;
+	private float fSize;
 	private float fMoveStartPos;
 	private float fOrgPos;
 	private ELineDir eLineDir = ELineDir.eLdNone;
+	private SIntPos2 curPos;
+	private SIntPos2 nextPos;
 
 	void Awake() {
 		uiSprite = this.GetComponent<UISprite>();
 	}
 
-	public void Init(ELineDir _eLineDir, Vector3 vec3Pos) {
+	public void Init(ELineDir _eLineDir, Vector3 vec3Pos, SIntPos2 pos) {
 		eLineDir = _eLineDir;
+		curPos = pos;
 		if (eLineDir == ELineDir.eLdHorizontal) {
 			uiSprite.pivot = UIWidget.Pivot.Left;
 			uiSprite.height = LINE_WIDTH;
@@ -30,7 +32,26 @@ public class TlLine : MonoBehaviour {
 		this.gameObject.SetActive(false);
 	}
 
+	public void InitMoveStartPos(bool bOpp) {
+		fSize = 0f;
+		this.gameObject.SetActive(true);
+		Vector3 vec3Pos;
+		if (eLineDir == ELineDir.eLdHorizontal) {
+			fOrgPos = orgPos.x;
+			fMoveStartPos = bOpp ? orgPos.x + MAX_SIZE : orgPos.x;
+			vec3Pos = new Vector3(fMoveStartPos, orgPos.y);
+			uiSprite.width = (int)fSize;
+		} else {
+			fOrgPos = orgPos.y;
+			fMoveStartPos = bOpp ? orgPos.y + MAX_SIZE :orgPos.y;
+			vec3Pos = new Vector3(orgPos.x, fMoveStartPos);
+			uiSprite.height = (int)fSize;
+		}
+		this.transform.localPosition = vec3Pos;
+	}
+
 	public void InitMoveStartPos(float fPos) {
+		fSize = 0f;
 		fMoveStartPos = fPos;
 		this.gameObject.SetActive(true);
 		Vector3 vec3Pos;
@@ -56,18 +77,25 @@ public class TlLine : MonoBehaviour {
 		if (fSize < 0) {
 			Vector3 pos;
 			if (eLineDir == ELineDir.eLdHorizontal) {
-				pos = new Vector3 (fMoveStartPos + fSize, orgPos.y);
+				pos = new Vector3(fMoveStartPos + fSize, orgPos.y);
 			} else {
-				pos = new Vector3 (orgPos.x, fMoveStartPos + fSize);
+				pos = new Vector3(orgPos.x, fMoveStartPos + fSize);
 			}
 			this.transform.localPosition = pos;
 			if (f_bIsEnd) {
+				nextPos = curPos;
 				uLineLength = (int)(fMoveStartPos - fOrgPos);
 			} else {
 				uLineLength = (int)(-fSize);
 			}
 		} else {
 			if (f_bIsEnd) {
+				nextPos = curPos;
+				if (eLineDir == ELineDir.eLdHorizontal) {
+					nextPos.x++;
+				} else {
+					nextPos.y++;
+				}
 				uLineLength = (int)(fOrgPos + MAX_SIZE - fMoveStartPos);
 			} else {
 				uLineLength = (int)fSize;
@@ -82,7 +110,7 @@ public class TlLine : MonoBehaviour {
 
 	public bool f_bIsEnd {
 		get {
-			return fMoveStartPos + fSize - fOrgPos >= MAX_SIZE || fMoveStartPos + fSize <= fOrgPos;
+			return fMoveStartPos + fSize - fOrgPos > MAX_SIZE || fMoveStartPos + fSize < fOrgPos;
 		}
 	}
 
@@ -91,10 +119,10 @@ public class TlLine : MonoBehaviour {
 			return eLineDir;
 		}
 	}
-}
 
-public enum ELineDir {
-	eLdNone,
-	eLdHorizontal,
-	eLdVertical
-};
+	public SIntPos2 f_nextPos {
+		get {
+			return nextPos;
+		}
+	}
+}
