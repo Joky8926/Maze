@@ -33,21 +33,13 @@ public class TlLine : MonoBehaviour {
 	}
 
 	public void InitMoveStartPos(bool bOpp) {
-		fSize = 0f;
-		this.gameObject.SetActive(true);
-		Vector3 vec3Pos;
+		float fPos;
 		if (eLineDir == ELineDir.eLdHorizontal) {
-			fOrgPos = orgPos.x;
-			fMoveStartPos = bOpp ? orgPos.x + MAX_SIZE : orgPos.x;
-			vec3Pos = new Vector3(fMoveStartPos, orgPos.y);
-			uiSprite.width = (int)fSize;
+			fPos = bOpp ? orgPos.x + MAX_SIZE : orgPos.x;
 		} else {
-			fOrgPos = orgPos.y;
-			fMoveStartPos = bOpp ? orgPos.y + MAX_SIZE :orgPos.y;
-			vec3Pos = new Vector3(orgPos.x, fMoveStartPos);
-			uiSprite.height = (int)fSize;
+			fPos = bOpp ? orgPos.y + MAX_SIZE :orgPos.y;
 		}
-		this.transform.localPosition = vec3Pos;
+		InitMoveStartPos(fPos);
 	}
 
 	public void InitMoveStartPos(float fPos) {

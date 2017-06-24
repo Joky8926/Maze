@@ -47,25 +47,24 @@ public class TlDrawLine : MonoBehaviour {
 	}
 
 	private void DrawHorizontalLine(int x, int y) {
-		GameObject go = CreateLine(_goPreLine);
-		Vector2 vec2Pos = new Vector2(x * 50 - Screen.width / 2, y * 50 - Screen.height / 2) + vec2Offset;
-		Vector3 pos = new Vector3(vec2Pos.x, vec2Pos.y);
-		go.name = HORIZONTAL_LINE + "_" + x + "_" + y;
-		TlLine scrLine = go.GetComponent<TlLine>();
-		SIntPos2 intPos = new SIntPos2(x, y);
-		scrLine.Init(ELineDir.eLdHorizontal, pos, intPos);
+		TlLine scrLine = CreateLine(ELineDir.eLdHorizontal, x, y);
+		scrLine.gameObject.name = HORIZONTAL_LINE + "_" + x + "_" + y;
 		arrDownLine[x, y] = scrLine;
 	}
 
 	private void DrawVerticalLine(int x, int y) {
+		TlLine scrLine = CreateLine(ELineDir.eLdVertical, x, y);
+		scrLine.gameObject.name = VERTICAL_LINE + "_" + x + "_" + y;
+		arrRightLine[x, y] = scrLine;
+	}
+
+	private TlLine CreateLine(ELineDir eLineDir, int x, int y) {
 		GameObject go = CreateLine(_goPreLine);
 		Vector2 vec2Pos = new Vector2(x * 50 - Screen.width / 2, y * 50 - Screen.height / 2) + vec2Offset;
 		Vector3 pos = new Vector3(vec2Pos.x, vec2Pos.y);
-		go.name = VERTICAL_LINE + "_" + x + "_" + y;
 		TlLine scrLine = go.GetComponent<TlLine>();
-		SIntPos2 intPos = new SIntPos2(x, y);
-		scrLine.Init(ELineDir.eLdVertical, pos, intPos);
-		arrRightLine[x, y] = scrLine;
+		scrLine.Init(eLineDir, pos, new SIntPos2(x, y));
+		return scrLine;
 	}
 
 	private void DrawLine() {
@@ -136,13 +135,7 @@ public class TlDrawLine : MonoBehaviour {
 		if (X < 0 || X >= arrDownLine.GetLength(0) || Y < 0 || Y >= arrDownLine.GetLength(1)) {
 			return null;
 		}
-		if (eLineDir == ELineDir.eLdHorizontal) {
-			Debug.Log("Horizontal:" + X + "|" + Y);
-			return arrDownLine[X, Y];
-		} else {
-			Debug.Log("Vertical:" + X + "|" + Y);
-			return arrRightLine[X, Y];
-		}
+		return GetLineByIndex(eLineDir, X, Y);
 	}
 
 	private TlLine GetLine(ELineDir eLineDir) {
@@ -151,6 +144,10 @@ public class TlDrawLine : MonoBehaviour {
 		int Y = Mathf.FloorToInt(vec2.y / 50);
 		X = Mathf.Clamp(X, 0, arrDownLine.GetLength(0) - 1);
 		Y = Mathf.Clamp(Y, 0, arrDownLine.GetLength(1) - 1);
+		return GetLineByIndex(eLineDir, X, Y);
+	}
+
+	private TlLine GetLineByIndex(ELineDir eLineDir, int X, int Y) {
 		if (eLineDir == ELineDir.eLdHorizontal) {
 			Debug.Log("Horizontal:" + X + "|" + Y);
 			return arrDownLine[X, Y];
